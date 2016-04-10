@@ -11,6 +11,8 @@
 		options: {
 			serviceUrl: 'https://graphhopper.com/api/1/route',
 			timeout: 30 * 1000,
+			alternativeroute: false,
+			alternative_route_max_paths: "3",
 			urlParameters: {}
 		},
 
@@ -151,7 +153,9 @@
 
 			baseUrl = this.options.serviceUrl + '?' +
 				locs.join('&');
-
+			if(this._apiKey == undefined && this.options.alternativeroute && waypoints.length == 2) {
+				baseUrl += "&algorithm=alternativeroute" + "&alternative_route.max_paths=" + this.options.alternative_route_max_paths;
+			}
 			return baseUrl + L.Util.getParamString(L.extend({
 					instructions: computeInstructions,
 					type: 'json',
